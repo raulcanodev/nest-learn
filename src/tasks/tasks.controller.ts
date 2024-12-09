@@ -11,8 +11,8 @@ import {
 import { TasksService } from './tasks.service';
 import { Task } from './task.model';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { TaskStatus } from './task.model';
 import { GetTaskFilterDTO } from './dto/get-tasks-filter.dto';
+import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -22,6 +22,7 @@ export class TasksController {
   getTasks(@Query() filterDTO: GetTaskFilterDTO): Task[] {
     // if we have any filter defined for tasksServices.getTasksWithFilters
     // otherwise we will return all tasks
+    //! You are here. Task implement validation
     if (Object.keys(filterDTO).length) {
       return this.tasksService.getTasksWithFilters(filterDTO);
     } else {
@@ -47,8 +48,9 @@ export class TasksController {
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id') id: string,
-    @Body('status') status: TaskStatus,
+    @Body() updateTaskStatusDto: UpdateTaskStatusDto,
   ): Task {
+    const { status } = updateTaskStatusDto;
     return this.tasksService.updateTaskStatus(id, status);
   }
 }
